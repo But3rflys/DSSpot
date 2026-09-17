@@ -315,8 +315,7 @@ local localization = qLocalization.new({
             key_tip = "Works only when creeps are visible",
             approach = "Auto approach",
             approach_dist = "Approach distance",
-            aggro = "Aggro creeps",
-            aggros = { off = "Off", night = "Night only", always = "Always" },
+            aggro_toggle = "Aggro creeps",
             icons = "Camp icons",
             size = "Icon size",
             lift = "Height above camp",
@@ -340,8 +339,7 @@ local localization = qLocalization.new({
             key_tip = "Работает, только если видны крипы",
             approach = "Авто-подход",
             approach_dist = "Дистанция подхода",
-            aggro = "Агр крипов",
-            aggros = { off = "Выключен", night = "Только ночью", always = "Всегда" },
+            aggro_toggle = "Агр крипов",
             icons = "Значки над кемпами",
             size = "Размер значка",
             lift = "Высота над кемпом",
@@ -374,7 +372,7 @@ local condition = icon_of(g_cast:Combo("ds.condition",
 local bind = tip(g_cast:Bind("ds.key", Enum.ButtonCode.KEY_NONE, "\u{f11c}"), "ds.key_tip")
 local approach = g_cast:Switch("ds.approach", true, "\u{f554}")
 local approach_dist = icon_of(g_cast:Slider("ds.approach_dist", 400, 3000, 1500), "\u{f337}")
-local aggro = icon_of(g_cast:Combo("ds.aggro", { "ds.aggros.off", "ds.aggros.night", "ds.aggros.always" }, 1), "\u{f255}")
+local aggro = g_cast:Switch("ds.aggro_toggle", true, "\u{f255}")
 
 local show_icons = g_look:Switch("ds.icons", true, "\u{f03e}")
 local tile_size = icon_of(g_look:Slider("ds.size", 14, 40, 22, "%d px"), "\u{f065}")
@@ -567,18 +565,6 @@ end
 local function call(fn, ...)
     local ok, value = pcall(fn, ...)
     if ok then return value end
-end
-
-local function is_night()
-    if call(GameRules.IsTemporaryNight) or call(GameRules.IsNightstalkerNight) then return true end
-    if call(GameRules.IsTemporaryDay) then return false end
-    local now, day, night = call(GameRules.GetTimeOfDay), call(GameRules.GetDaytimeStart), call(GameRules.GetNighttimeStart)
-    if type(now) == "number" and type(day) == "number" and type(night) == "number" and day ~= night then
-        if day < night then return now < day or now >= night end
-        return now >= night and now < day
-    end
-    local t = call(GameRules.GetDOTATime, false, false)
-    return type(t) == "number" and t > 0 and math.floor(t / 300) % 2 == 1
 end
 
 local function log(fmt, ...)
@@ -789,9 +775,7 @@ local function bind_logic(hero, hero_pos, vac, now)
     end
     if not approach:Get() then return end
 
-    local aggro_mode = aggro:Get()
-    local may_aggro = aggro_mode == 2 or (aggro_mode == 1 and is_night())
-    if not ready and #creeps > 0 and not session.aggroed and may_aggro then
+    if not ready and #creeps > 0 and not session.aggroed and aggro:Get() then
         if aggro_step(hero, creeps, now) then
             session.wait_start = nil
             session.progress_pos = nil
