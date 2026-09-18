@@ -304,52 +304,56 @@ end
 
 local localization = qLocalization.new({
     en = {
-        ds = {
-            group = { cast = "Cast", look = "Visuals" },
-            enable = "Enable",
-            extra = "Extra",
-            log = "Write to log",
-            condition = "Condition",
-            conditions = { all = "All creeps", strongest = "Strongest", any = "Any creep", none = "No condition" },
-            key = "Key",
-            key_tip = "Works only when creeps are visible",
-            approach = "Auto approach",
-            approach_dist = "Approach distance",
-            aggro_toggle = "Aggro creeps",
-            icons = "Camp icons",
-            size = "Icon size",
-            lift = "Height above camp",
-            glow = "Bar glow",
-            radius = "Vacuum radius",
-            point = "Cast point",
-            creeps = "Creep rings",
-            stand = "Hero position",
-            radius_dist = "Visible from",
-        },
+        ds_group_cast = "Cast",
+        ds_group_look = "Visuals",
+        ds_enable = "Enable",
+        ds_extra = "Extra",
+        ds_log = "Write to log",
+        ds_condition = "Condition",
+        ds_conditions_all = "All creeps",
+        ds_conditions_strongest = "Strongest",
+        ds_conditions_any = "Any creep",
+        ds_conditions_none = "No condition",
+        ds_key = "Key",
+        ds_key_tip = "Works only when creeps are visible",
+        ds_approach = "Auto approach",
+        ds_approach_dist = "Approach distance",
+        ds_aggro_toggle = "Aggro creeps",
+        ds_icons = "Camp icons",
+        ds_size = "Icon size",
+        ds_lift = "Height above camp",
+        ds_glow = "Bar glow",
+        ds_radius = "Vacuum radius",
+        ds_point = "Cast point",
+        ds_creeps = "Creep rings",
+        ds_stand = "Hero position",
+        ds_radius_dist = "Visible from",
     },
     ru = {
-        ds = {
-            group = { cast = "Каст", look = "Вид" },
-            enable = "Включить",
-            extra = "Дополнительно",
-            log = "Писать в лог",
-            condition = "Условие",
-            conditions = { all = "Все крипы", strongest = "Сильнейший", any = "Любой крип", none = "Без условия" },
-            key = "Клавиша",
-            key_tip = "Работает, только если видны крипы",
-            approach = "Авто-подход",
-            approach_dist = "Дистанция подхода",
-            aggro_toggle = "Агр крипов",
-            icons = "Значки над кемпами",
-            size = "Размер значка",
-            lift = "Высота над кемпом",
-            glow = "Свечение полоски",
-            radius = "Радиус Vacuum",
-            point = "Точка каста",
-            creeps = "Кольца на крипах",
-            stand = "Позиция героя",
-            radius_dist = "Видно с расстояния",
-        },
+        ds_group_cast = "Каст",
+        ds_group_look = "Вид",
+        ds_enable = "Включить",
+        ds_extra = "Дополнительно",
+        ds_log = "Писать в лог",
+        ds_condition = "Условие",
+        ds_conditions_all = "Все крипы",
+        ds_conditions_strongest = "Сильнейший",
+        ds_conditions_any = "Любой крип",
+        ds_conditions_none = "Без условия",
+        ds_key = "Клавиша",
+        ds_key_tip = "Работает, только если видны крипы",
+        ds_approach = "Авто-подход",
+        ds_approach_dist = "Дистанция подхода",
+        ds_aggro_toggle = "Агр крипов",
+        ds_icons = "Значки над кемпами",
+        ds_size = "Размер значка",
+        ds_lift = "Высота над кемпом",
+        ds_glow = "Свечение полоски",
+        ds_radius = "Радиус Vacuum",
+        ds_point = "Точка каста",
+        ds_creeps = "Кольца на крипах",
+        ds_stand = "Позиция героя",
+        ds_radius_dist = "Видно с расстояния",
     },
 })
 
@@ -358,31 +362,31 @@ local UI = localization.WrapLibrary(Menu)
 local hero_tab = UI.Find("Heroes", "Hero List", "Dark Seer")
 local page = hero_tab and hero_tab:Create("Spot Block") or UI.Create("Heroes", "Hero List", "Dark Seer", "Spot Block")
 
-local g_cast = page:Create("ds.group.cast", Enum.GroupSide.Left)
-local g_look = page:Create("ds.group.look", Enum.GroupSide.Right)
+local g_cast = page:Create("ds_group_cast", Enum.GroupSide.Left)
+local g_look = page:Create("ds_group_look", Enum.GroupSide.Right)
 
-local enable = g_cast:Switch("ds.enable", true, "\u{f011}")
+local enable = g_cast:Switch("ds_enable", true, "\u{f011}")
 local enable_gear = (function()
-    local ok, gear = pcall(enable.Gear, enable, "ds.extra")
+    local ok, gear = pcall(enable.Gear, enable, "ds_extra")
     return ok and gear or g_cast
 end)()
-local write_log = enable_gear:Switch("ds.log", true, "\u{f15c}")
-local condition = icon_of(g_cast:Combo("ds.condition",
-    { "ds.conditions.all", "ds.conditions.strongest", "ds.conditions.any", "ds.conditions.none" }, 0), "\u{f05b}")
-local bind = tip(g_cast:Bind("ds.key", Enum.ButtonCode.KEY_NONE, "\u{f11c}"), "ds.key_tip")
-local approach = g_cast:Switch("ds.approach", true, "\u{f554}")
-local approach_dist = icon_of(g_cast:Slider("ds.approach_dist", 400, 3000, 1500), "\u{f337}")
-local aggro = g_cast:Switch("ds.aggro_toggle", true, "\u{f255}")
+local write_log = enable_gear:Switch("ds_log", true, "\u{f15c}")
+local condition = icon_of(g_cast:Combo("ds_condition",
+    { "ds_conditions_all", "ds_conditions_strongest", "ds_conditions_any", "ds_conditions_none" }, 0), "\u{f05b}")
+local bind = tip(g_cast:Bind("ds_key", Enum.ButtonCode.KEY_NONE, "\u{f11c}"), "ds_key_tip")
+local approach = g_cast:Switch("ds_approach", true, "\u{f554}")
+local approach_dist = icon_of(g_cast:Slider("ds_approach_dist", 400, 3000, 1500), "\u{f337}")
+local aggro = g_cast:Switch("ds_aggro_toggle", true, "\u{f255}")
 
-local show_icons = g_look:Switch("ds.icons", true, "\u{f03e}")
-local tile_size = icon_of(g_look:Slider("ds.size", 14, 40, 22, "%d px"), "\u{f065}")
-local tile_lift = icon_of(g_look:Slider("ds.lift", 0, 150, 40, "%d px"), "\u{f062}")
-local show_glow = g_look:Switch("ds.glow", true, "\u{f0eb}")
-local show_radius = g_look:Switch("ds.radius", true, "\u{f192}")
-local show_point = g_look:Switch("ds.point", true, "\u{f140}")
-local show_creeps = g_look:Switch("ds.creeps", true, "\u{f1ce}")
-local show_stand = g_look:Switch("ds.stand", true, "\u{f3c5}")
-local radius_dist = icon_of(g_look:Slider("ds.radius_dist", 600, 5000, 1600), "\u{f06e}")
+local show_icons = g_look:Switch("ds_icons", true, "\u{f03e}")
+local tile_size = icon_of(g_look:Slider("ds_size", 14, 40, 22, "%d px"), "\u{f065}")
+local tile_lift = icon_of(g_look:Slider("ds_lift", 0, 150, 40, "%d px"), "\u{f062}")
+local show_glow = g_look:Switch("ds_glow", true, "\u{f0eb}")
+local show_radius = g_look:Switch("ds_radius", true, "\u{f192}")
+local show_point = g_look:Switch("ds_point", true, "\u{f140}")
+local show_creeps = g_look:Switch("ds_creeps", true, "\u{f1ce}")
+local show_stand = g_look:Switch("ds_stand", true, "\u{f3c5}")
+local radius_dist = icon_of(g_look:Slider("ds_radius_dist", 600, 5000, 1600), "\u{f06e}")
 
 local function sync_menu()
     local on = enable:Get()
